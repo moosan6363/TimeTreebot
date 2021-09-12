@@ -52,7 +52,7 @@ def handle_message(event):
 def handle_follow(event):
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text='feature')
+        TextSendMessage(text='TimeTreebotです. \n 最近の予定を毎朝通知します. \n TimeTreeに変更があった際にも変更を通知します. ')
     )
 
 if __name__ == "__main__":
