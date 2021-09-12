@@ -8,7 +8,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,  FollowEvent
+    MessageEvent, TextMessage, TextSendMessage
 )
 
 app = Flask(__name__)
@@ -46,13 +46,6 @@ def handle_message(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=event.message.text)
-    )
-
-@handler.add(FollowEvent)
-def handle_follow(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text='TimeTreebotです. \n 最近の予定を毎朝通知します. \n TimeTreeに変更があった際にも変更を通知します. ')
     )
 
 if __name__ == "__main__":
