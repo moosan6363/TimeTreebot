@@ -1,6 +1,6 @@
 from flask import Flask, request, abort
 import os
-import timeTable
+import TimeTreeAPI
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -13,7 +13,7 @@ from linebot.models import (
 )
 
 app = Flask(__name__)
-res = timeTable.timeTable()
+res = TimeTreeAPI.TimeTreeAPI(0)
 
 #環境変数取得
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
@@ -47,7 +47,7 @@ def callback():
 def handle_message(event):
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text = res.getResponse(event.message.text))
+        TextSendMessage(text = res.getSchedule())
     )
 
 if __name__ == "__main__":
