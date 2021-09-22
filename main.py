@@ -45,12 +45,12 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text = res.getSchedule())
-    )
+    if event.message.text == "予定確認" :
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text = res.getSchedule())
+        )
 
 if __name__ == "__main__":
-#    app.run()
     port = int(os.getenv("PORT"))
     app.run(host="0.0.0.0", port=port)

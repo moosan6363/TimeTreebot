@@ -46,8 +46,8 @@ class TimeTreeAPI():
             data = response.json()
             try :
                 task = data["data"]
-                returnStr = f"5日以内の予定は{len(task)}件です。"
-                returnStr = "--------------予定一覧--------------"
+                returnStr = f"5日以内の予定は{len(task)}件です。\n"
+                returnStr += "----------------予定一覧----------------"
                 for schedule in task :
                     start = self.isotoDate(schedule["attributes"]["start_at"])
                     end = self.isotoDate(schedule["attributes"]["end_at"])
