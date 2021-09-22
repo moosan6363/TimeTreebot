@@ -45,13 +45,16 @@ class TimeTreeAPI():
         if response.status_code == 200 :
             data = response.json()
             try :
-                returnStr = "予定一覧\n"
-                for schedule in data["data"] :
+                task = data["data"]
+                returnStr = f"5日以内の予定は{len(task)}件です。"
+                returnStr = "--------------予定一覧--------------"
+                for schedule in task :
                     start = self.isotoDate(schedule["attributes"]["start_at"])
                     end = self.isotoDate(schedule["attributes"]["end_at"])
+                    returnStr += "\n\n"
                     returnStr += "予定: " + schedule["attributes"]["title"] + "\n"
                     returnStr += "作成者: " + self.memberDic[schedule["relationships"]["creator"]["data"]["id"]] + "\n"
-                    returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}\n\n"
+                    returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}"
                 return returnStr
             except :
                 return "予定はありません"
