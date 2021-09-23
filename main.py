@@ -26,8 +26,8 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 def hello_world():
     return "hello world!"
 
-@app.route("/interval")
-def getSchedule():
+@app.route("/interval", methods=['GET'])
+def interval():
     line_bot_api.broadcast(TextSendMessage(text = "complete"))
     
 @app.route("/callback", methods=['POST'])
