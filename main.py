@@ -1,12 +1,13 @@
 from flask import Flask, request, abort
 import os
 import TimeTreeAPI
+import json
 
 from linebot import (
     LineBotApi, WebhookHandler
 )
 from linebot.exceptions import (
-    InvalidSignatureError
+    InvalidSignatureError, LineBotApiError
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage
@@ -41,6 +42,17 @@ def callback():
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
+
+    # userId を取得 (1)
+    body_json = json.loads(body)
+    app.logger.info("User Id: {}".format(body_json["events"][0]["source"]["userId"]))
+    print(body_json["events"][0]["source"]["userId"])
+
+    text_message = body_json["events"][0]["source"]["userId"]
+    try:
+        line_bot_api.push_message(SEND_USER_ID, TextSendMessage(text=text_message))
+    except LineBotApiError as e:
+        print(e)
 
     # handle webhook body
     try:
