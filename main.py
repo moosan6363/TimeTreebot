@@ -30,9 +30,9 @@ def hello_world():
 @app.route("/interval")
 def interval():
     try : 
-        line_bot_api.broadcast(TextSendMessage(text = res.getSchedule()))
+        line_bot_api.push_message(MY_USER_ID, TextSendMessage(text = res.getSchedule()))
     except LineBotApiError as e :
-        return e
+        print(e)
     
 @app.route("/callback", methods=['POST'])
 def callback():
