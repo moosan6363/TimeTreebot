@@ -37,7 +37,9 @@ def hello_world():
 def getSchedule():
     text = res.getSchedule()
     data = '{ "messages":[ { "type":"text", "text":{} }] }'.format(text)
-    requests.post(lineURL + "/broadcast", headers = headers, data = data)
+    response = requests.post(lineURL + "/broadcast", headers = headers, data = data)
+    if(response.status_code == 200) : return "200"
+    else : return "error"
 
 @app.route("/callback", methods=['POST'])
 def callback():
