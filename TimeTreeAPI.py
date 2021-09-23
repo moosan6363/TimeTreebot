@@ -70,11 +70,12 @@ class TimeTreeAPI():
             try :
                 task = data["data"]
                 returnStr = "予定の更新を確認しました。" 
+                dt_now = pytz.utc.localize(datetime.datetime.now()).astimezone(pytz.timezone(os.environ["TZ"]))
+                print(dt_now)
                 for schedule in task :
-                    dt_now = pytz.utc.localize(datetime.datetime.now()).astimezone(pytz.timezone(os.environ["TZ"]))
                     update = self.isotoDate(schedule["attributes"]["updated_at"])
                     td = dt_now-update
-                    print(td.seconds)
+                    print(update, td.seconds)
                     if td.seconds < 14400 :   
                         start = self.isotoDate(schedule["attributes"]["start_at"])
                         end = self.isotoDate(schedule["attributes"]["end_at"])
