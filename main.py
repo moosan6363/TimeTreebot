@@ -21,12 +21,6 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
-lineURL = "https://api.line.me/v2/bot/message"
-
-headers = {
-    "Authorization": f"Bearer {YOUR_CHANNEL_ACCESS_TOKEN}",
-    "Content-Type": "application/json"
-}
 
 @app.route("/")
 def hello_world():
@@ -34,9 +28,9 @@ def hello_world():
 
 @app.route("/interval")
 def getSchedule():
-    line_bot_api.broadcast(TextSendMessage(text = res.getSchedule()))
+    text = res.getSchedule()
+    line_bot_api.broadcast(TextSendMessage(text = text))
     
-
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
