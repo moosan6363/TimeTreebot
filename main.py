@@ -6,7 +6,7 @@ from linebot import (
     LineBotApi, WebhookHandler
 )
 from linebot.exceptions import (
-    InvalidSignatureError, LineBotApiError
+    InvalidSignatureError
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage
@@ -31,8 +31,9 @@ def hello_world():
 def interval():
     try : 
         line_bot_api.push_message(MY_USER_ID, TextSendMessage(text = res.getSchedule()))
-    except LineBotApiError as e :
-        print(e)
+        return "OK"
+    except :
+        return "Error 404"
     
 @app.route("/callback", methods=['POST'])
 def callback():
