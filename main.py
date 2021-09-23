@@ -31,9 +31,9 @@ def hello_world():
 def interval():
     try : 
         line_bot_api.push_message(MY_USER_ID, TextSendMessage(text = res.getSchedule()))
-        return "OK"
+        return "push_message"
     except :
-        return "Error 404"
+        return "Error 500"
     
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -58,6 +58,11 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text = res.getSchedule())
+        )
+    elif event.message.text == "更新確認" :
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text = res.updateSchedule())
         )
 
 

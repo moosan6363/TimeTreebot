@@ -11,6 +11,10 @@ class TimeTreeAPI():
         "Authorization": f"Bearer {Token}",
         "Content-Type": "application/json"
     }
+    params = {
+        "timezone" : "Asia/Tokyo",
+        "days" : "5"
+    }
 
     def __init__(self, order) :
         response = requests.get("https://timetreeapis.com/calendars", headers = self.headers)
@@ -36,17 +40,13 @@ class TimeTreeAPI():
         return dt
 
     def getSchedule(self) :
-        params = {
-            "timezone" : "Asia/Tokyo",
-            "days" : "5"
-        }
 
-        response = requests.get(self.timetreeURL + "/upcoming_events", headers = self.headers, params = params)
+        response = requests.get(self.timetreeURL + "/upcoming_events", headers = self.headers, params = self.params)
         if response.status_code == 200 :
             data = response.json()
             try :
                 task = data["data"]
-                returnStr = f"5日以内の予定は{len(task)}件です。\n"
+                returnStr = f"{self.params['days']}日以内の予定は{len(task)}件です。\n"
                 returnStr += "----------------予定一覧----------------"
                 for schedule in task :
                     start = self.isotoDate(schedule["attributes"]["start_at"])
@@ -54,10 +54,36 @@ class TimeTreeAPI():
                     returnStr += "\n\n"
                     returnStr += "予定: " + schedule["attributes"]["title"] + "\n"
                     returnStr += "作成者: " + self.memberDic[schedule["relationships"]["creator"]["data"]["id"]] + "\n"
-                    if schedule["attributes"]["all_day"] == "true" :
+                    if schedule["attributes"]["all_day"] :
                         returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} " + "終日"
                     else :
                         returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}"
                 return returnStr
             except :
-                return "予定はありません"
+                return f"{self.params['days']}日以内に予定はありません。\n"
+    
+    def updateSchedule(self) :
+
+        response = requests.get(self.timetreeURL + "/upcoming_events", headers = self.headers, params = self.params)
+        if response.status_code == 200 :
+            data = response.json()
+            try :
+                task = data["data"]
+                returnStr = "予定の更新を確認しました。" 
+                for schedule in task :
+                    dt_now = pytz.utc.localize(datetime.datetime.now()).astimezone(pytz.timezone(os.environ["TZ"]))
+                    update = self.isotoDate(schedule["attributes"]["updated_at"])
+                    td = dt_now-update
+                    if td.seconds < 14400 :   
+                        start = self.isotoDate(schedule["attributes"]["start_at"])
+                        end = self.isotoDate(schedule["attributes"]["end_at"])
+                        returnStr += "\n\n"
+                        returnStr += "予定: " + schedule["attributes"]["title"] + "\n"
+                        returnStr += "作成者: " + self.memberDic[schedule["relationships"]["creator"]["data"]["id"]] + "\n"
+                        if schedule["attributes"]["all_day"] :
+                            returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} " + "終日"
+                        else :
+                            returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}"
+                    return returnStr
+            except :
+                return ""
