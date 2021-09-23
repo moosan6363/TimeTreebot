@@ -54,7 +54,10 @@ class TimeTreeAPI():
                     returnStr += "\n\n"
                     returnStr += "予定: " + schedule["attributes"]["title"] + "\n"
                     returnStr += "作成者: " + self.memberDic[schedule["relationships"]["creator"]["data"]["id"]] + "\n"
-                    returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}"
+                    if schedule["attributes"]["all_day"] == "true" :
+                        returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} " + "終日"
+                    else :
+                        returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}"
                 return returnStr
             except :
                 return "予定はありません"
