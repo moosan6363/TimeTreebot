@@ -27,10 +27,11 @@ def hello_world():
     return "hello world!"
 
 @app.route("/interval")
-def getSchedule():
+def interval():
     try : 
-        line_bot_api.broadcast(TextSendMessage(text = res.getSchedule()))
-    except : return "e"
+        return "OK"
+        # line_bot_api.broadcast(TextSendMessage(text = res.getSchedule()))
+    except : return "Error 500"
     
 @app.route("/callback", methods=['POST'])
 def callback():
