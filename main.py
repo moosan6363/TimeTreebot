@@ -55,7 +55,8 @@ def handle_message(event):
     if event.message.text == "予定確認" :
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text = res.getSchedule())
+            TextSendMessage(text = event.source.userID)
+            # TextSendMessage(text = res.getSchedule())
         )
 
 if __name__ == "__main__":
