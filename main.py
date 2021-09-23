@@ -39,10 +39,6 @@ def getSchedule():
     data = '{ "messages":[ { "type":"text", "text":{} }] }'.format(text)
     requests.post(lineURL + "/broadcast", headers = headers, data = data)
 
-@app.route("/interval")
-def hello_interval():
-    return "hello interval!"
-
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
