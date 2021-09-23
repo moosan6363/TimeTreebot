@@ -34,7 +34,9 @@ def hello_world():
 
 @app.route("/interval")
 def getSchedule():
-    line_bot_api.broadcast(TextSendMessage(text = res.getSchedule()))
+    try : 
+        line_bot_api.broadcast(TextSendMessage(text = res.getSchedule()))
+    except : return "e"
     
 
 @app.route("/callback", methods=['POST'])
