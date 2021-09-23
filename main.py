@@ -1,7 +1,6 @@
 from flask import Flask, request, abort
 import os
 import TimeTreeAPI
-import requests
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -35,11 +34,8 @@ def hello_world():
 
 @app.route("/interval")
 def getSchedule():
-    text = res.getSchedule()
-    data = '{ "messages":[ { "type":"text", "text":{} }] }'.format(text)
-    response = requests.post(lineURL + "/broadcast", headers = headers, data = data)
-    if(response.status_code == 200) : return "200"
-    else : return "error"
+    line_bot_api.broadcast(TextSendMessage(text = res.getSchedule()))
+    
 
 @app.route("/callback", methods=['POST'])
 def callback():
