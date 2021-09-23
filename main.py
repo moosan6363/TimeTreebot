@@ -28,8 +28,7 @@ def hello_world():
 
 @app.route("/interval")
 def getSchedule():
-    text = res.getSchedule()
-    line_bot_api.broadcast(TextSendMessage(text = text))
+    line_bot_api.broadcast(TextSendMessage(text = "complete"))
     
 @app.route("/callback", methods=['POST'])
 def callback():
