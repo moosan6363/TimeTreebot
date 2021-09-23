@@ -84,6 +84,6 @@ class TimeTreeAPI():
                             returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} " + "終日"
                         else :
                             returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}"
-                    return returnStr
+                return returnStr
             except :
                 return ""
