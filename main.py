@@ -60,10 +60,12 @@ def handle_message(event):
             TextSendMessage(text = res.getSchedule())
         )
     elif event.message.text == "更新確認" :
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text = res.updateSchedule())
-        )
+        try :
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text = res.updateSchedule())
+            )
+        except : print("emptyError")
 
 
 if __name__ == "__main__":
