@@ -1,6 +1,7 @@
 from flask import Flask, request, abort
 import os
 import TimeTreeAPI
+import requests
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -23,13 +24,20 @@ MY_USER_ID = os.environ["MY_USER_ID"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
+headers = {
+    "Authorization": f"Bearer {YOUR_CHANNEL_ACCESS_TOKEN}",
+    "Content-Type": "application/json"
+}
+
 @app.route("/")
 def hello_world():
     return "hello world!"
 
 @app.route("/interval")
 def interval():
-    line_bot_api.broadcast(TextSendMessage(text = res.getSchedule()))
+    text = TextSendMessage(text = res.getSchedule())
+    data = '{"messages":[' + str(text) + ']}'
+    requests.post("https://api.line.me/v2/bot/message/broadcast", headers=headers, data = data)
     return "push_message"
 
 @app.route("/update")
