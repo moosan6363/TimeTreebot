@@ -74,11 +74,8 @@ class TimeTreeAPI():
                 print(dt_now)
                 for schedule in task :
                     update = self.isotoDate(schedule["attributes"]["updated_at"])
-                    td = dt_now-update
                     returnStr += "\n\n"
                     returnStr += update
-                    returnStr += "\n\n"
-                    returnStr += td.total_seconds
                 #     if td.total_seconds < 14400 :   
                 #         start = self.isotoDate(schedule["attributes"]["start_at"])
                 #         end = self.isotoDate(schedule["attributes"]["end_at"])
