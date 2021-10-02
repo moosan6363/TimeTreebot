@@ -1,6 +1,7 @@
 from flask import Flask, request, abort
 import os
 import TimeTreeAPI
+import requests
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -18,9 +19,14 @@ res = TimeTreeAPI.TimeTreeAPI(0)
 #環境変数取得
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
+MY_USER_ID = os.environ["MY_USER_ID"]
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
+headers = {
+    "Authorization": f"Bearer {YOUR_CHANNEL_ACCESS_TOKEN}",
+    "Content-Type": "application/json"
+}
 
 @app.route("/")
 def hello_world():
@@ -29,9 +35,22 @@ def hello_world():
 @app.route("/interval")
 def interval():
     try : 
-        return "OK"
-        # line_bot_api.broadcast(TextSendMessage(text = res.getSchedule()))
-    except : return "Error 500"
+        text = TextSendMessage(text = res.getSchedule())
+        data = '{"messages":[' + str(text) + ']}'
+        requests.post("https://api.line.me/v2/bot/message/broadcast", headers=headers, data = data)
+        return "send_interval_message"
+    except :
+        return "Error 500"
+
+@app.route("/update")
+def update():
+    try : 
+        text = TextSendMessage(text = res.updateSchedule())
+        data = '{"messages":[' + str(text) + ']}'
+        requests.post("https://api.line.me/v2/bot/message/broadcast", headers=headers, data = data)
+        return "send_update_message"
+    except :
+        return "Error 500"
     
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -57,6 +76,14 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text = res.getSchedule())
         )
+    elif event.message.text == "更新確認" :
+        try :
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text = res.updateSchedule())
+            )
+        except : print("emptyError")
+
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT"))
