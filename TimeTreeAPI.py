@@ -74,19 +74,19 @@ class TimeTreeAPI():
                 print(dt_now)
                 for schedule in task :
                     update = self.isotoDate(schedule["attributes"]["updated_at"])
-                    returnStr += "\n\n"
-                    returnStr += update
-                #     if td.total_seconds < 14400 :   
-                #         start = self.isotoDate(schedule["attributes"]["start_at"])
-                #         end = self.isotoDate(schedule["attributes"]["end_at"])
-                #         returnStr += "\n\n"
-                #         returnStr += "予定: " + schedule["attributes"]["title"] + "\n"
-                #         returnStr += "作成者: " + self.memberDic[schedule["relationships"]["creator"]["data"]["id"]] + "\n"
-                #         if schedule["attributes"]["all_day"] :
-                #             returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} " + "終日"
-                #         else :
-                #             returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}"
-                # if(returnStr == "予定の更新を確認しました。") : returnStr = ""
+                    td = dt_now-update
+                    print(update, td.total_seconds())
+                    if td.total_seconds() < 46800 :   
+                        start = self.isotoDate(schedule["attributes"]["start_at"])
+                        end = self.isotoDate(schedule["attributes"]["end_at"])
+                        returnStr += "\n\n"
+                        returnStr += "予定: " + schedule["attributes"]["title"] + "\n"
+                        returnStr += "作成者: " + self.memberDic[schedule["relationships"]["creator"]["data"]["id"]] + "\n"
+                        if schedule["attributes"]["all_day"] :
+                            returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} " + "終日"
+                        else :
+                            returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}"
+                if(returnStr == "予定の更新を確認しました。") : returnStr = ""
                 return returnStr
             except :
                 return ""
