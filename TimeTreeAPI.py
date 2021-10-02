@@ -67,26 +67,24 @@ class TimeTreeAPI():
         response = requests.get(self.timetreeURL + "/upcoming_events", headers = self.headers, params = self.params)
         if response.status_code == 200 :
             data = response.json()
-            try :
-                task = data["data"]
-                returnStr = "予定の更新を確認しました。" 
-                dt_now = pytz.utc.localize(datetime.datetime.now()).astimezone(pytz.timezone(os.environ["TZ"]))
-                print(dt_now)
-                for schedule in task :
-                    update = self.isotoDate(schedule["attributes"]["updated_at"])
-                    td = dt_now-update
-                    print(update, td.total_seconds())
-                    if td.total_seconds() < 46800 :   
-                        start = self.isotoDate(schedule["attributes"]["start_at"])
-                        end = self.isotoDate(schedule["attributes"]["end_at"])
-                        returnStr += "\n\n"
-                        returnStr += "予定: " + schedule["attributes"]["title"] + "\n"
-                        returnStr += "作成者: " + self.memberDic[schedule["relationships"]["creator"]["data"]["id"]] + "\n"
-                        if schedule["attributes"]["all_day"] :
-                            returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} " + "終日"
-                        else :
-                            returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}"
-                if(returnStr == "予定の更新を確認しました。") : returnStr = ""
-                return returnStr
-            except :
-                return ""
+            task = data["data"]
+
+            returnStr = "予定の更新を確認しました。" 
+            dt_now = pytz.utc.localize(datetime.datetime.now()).astimezone(pytz.timezone(os.environ["TZ"]))
+            for schedule in task :
+                update = self.isotoDate(schedule["attributes"]["updated_at"])
+                td = dt_now-update
+                print(update, td.total_seconds())
+                if td.total_seconds() < 48000 :
+                    start = self.isotoDate(schedule["attributes"]["start_at"])
+                    end = self.isotoDate(schedule["attributes"]["end_at"])
+                    returnStr += "\n\n"
+                    returnStr += "予定: " + schedule["attributes"]["title"] + "\n"
+                    returnStr += "作成者: " + self.memberDic[schedule["relationships"]["creator"]["data"]["id"]] + "\n"
+                    if schedule["attributes"]["all_day"] :
+                        returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} " + "終日"
+                    else :
+                        returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}"
+            if(returnStr == "予定の更新を確認しました。") : returnStr = ""
+            return returnStr
+

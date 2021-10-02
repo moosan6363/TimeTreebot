@@ -30,8 +30,16 @@ def hello_world():
 @app.route("/interval")
 def interval():
     try : 
-        line_bot_api.push_message(MY_USER_ID, TextSendMessage(text = res.getSchedule()))
+        line_bot_api.broadcast(TextSendMessage(text = res.getSchedule()))
         return "push_message"
+    except :
+        return "Error 500"
+
+@app.route("/update")
+def update():
+    try : 
+        line_bot_api.push_message(MY_USER_ID, TextSendMessage(text = res.updateSchedule()))
+        return "send_update_message"
     except :
         return "Error 500"
     
