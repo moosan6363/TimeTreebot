@@ -23,7 +23,6 @@ MY_USER_ID = os.environ["MY_USER_ID"]
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
-
 headers = {
     "Authorization": f"Bearer {YOUR_CHANNEL_ACCESS_TOKEN}",
     "Content-Type": "application/json"
@@ -35,15 +34,20 @@ def hello_world():
 
 @app.route("/interval")
 def interval():
-    text = TextSendMessage(text = res.getSchedule())
-    data = '{"messages":[' + str(text) + ']}'
-    requests.post("https://api.line.me/v2/bot/message/broadcast", headers=headers, data = data)
-    return "push_message"
+    try : 
+        text = TextSendMessage(text = res.getSchedule())
+        data = '{"messages":[' + str(text) + ']}'
+        requests.post("https://api.line.me/v2/bot/message/broadcast", headers=headers, data = data)
+        return "send_interval_message"
+    except :
+        return "Error 500"
 
 @app.route("/update")
 def update():
     try : 
-        line_bot_api.push_message(MY_USER_ID, TextSendMessage(text = res.updateSchedule()))
+        text = TextSendMessage(text = res.updateSchedule())
+        data = '{"messages":[' + str(text) + ']}'
+        requests.post("https://api.line.me/v2/bot/message/broadcast", headers=headers, data = data)
         return "send_update_message"
     except :
         return "Error 500"
