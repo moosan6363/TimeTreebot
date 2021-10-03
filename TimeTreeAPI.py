@@ -46,7 +46,9 @@ class TimeTreeAPI():
             data = response.json()
             try :
                 task = data["data"]
-                returnStr = f"{self.params['days']}日以内の予定は{len(task)}件です。\n"
+                dt_now = datetime.datetime.now()
+                returnStr = f"おはようございます。今日は{dt_now.month}月{dt_now.day}日です。\n"
+                returnStr = f"今日から{self.params['days']}日以内の予定は{len(task)}件です。\n"
                 returnStr += "----------------予定一覧----------------"
                 for schedule in task :
                     start = self.isotoDate(schedule["attributes"]["start_at"])
@@ -69,13 +71,14 @@ class TimeTreeAPI():
             data = response.json()
             task = data["data"]
 
-            returnStr = "予定の更新を確認しました。" 
+            returnStr = "予定の更新を確認しました。\n" 
+            returnStr += "----------------更新一覧----------------"
             dt_now = pytz.utc.localize(datetime.datetime.now()).astimezone(pytz.timezone(os.environ["TZ"]))
             for schedule in task :
                 update = self.isotoDate(schedule["attributes"]["updated_at"])
                 td = dt_now-update
                 print(update, td.total_seconds())
-                if td.total_seconds() < 48000 :
+                if td.total_seconds() < 40200 :
                     start = self.isotoDate(schedule["attributes"]["start_at"])
                     end = self.isotoDate(schedule["attributes"]["end_at"])
                     returnStr += "\n\n"
