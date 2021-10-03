@@ -48,7 +48,7 @@ class TimeTreeAPI():
                 task = data["data"]
                 dt_now = datetime.datetime.now()
                 returnStr = f"おはようございます。今日は{dt_now.month}月{dt_now.day}日です。\n"
-                returnStr = f"今日から{self.params['days']}日以内の予定は{len(task)}件です。\n"
+                returnStr += f"今日から{self.params['days']}日以内の予定は{len(task)}件です。\n"
                 returnStr += "----------------予定一覧----------------"
                 for schedule in task :
                     start = self.isotoDate(schedule["attributes"]["start_at"])
