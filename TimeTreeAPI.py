@@ -74,11 +74,13 @@ class TimeTreeAPI():
             returnStr = "予定の更新を確認しました。\n" 
             returnStr += "----------------更新一覧----------------"
             dt_now = pytz.utc.localize(datetime.datetime.now()).astimezone(pytz.timezone(os.environ["TZ"]))
+            isnotSchedule = True
             for schedule in task :
                 update = self.isotoDate(schedule["attributes"]["updated_at"])
                 td = dt_now-update
                 print(update, td.total_seconds())
                 if td.total_seconds() < 40200 :
+                    isnotSchedule = False
                     start = self.isotoDate(schedule["attributes"]["start_at"])
                     end = self.isotoDate(schedule["attributes"]["end_at"])
                     returnStr += "\n\n"
@@ -88,6 +90,6 @@ class TimeTreeAPI():
                         returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} " + "終日"
                     else :
                         returnStr += "時間: " + f"{start.year:04}/{start.month:02}/{start.day:02} {start.hour:02}:{start.minute:02}~{end.hour:02}:{end.minute:02}"
-            if(returnStr == "予定の更新を確認しました。") : returnStr = ""
-            return returnStr
+            if isnotSchedule : return ""
+            else : return returnStr
 
